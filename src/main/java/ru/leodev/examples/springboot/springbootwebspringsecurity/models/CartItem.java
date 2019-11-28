@@ -10,15 +10,12 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "comments")
-public class Comment {
+@Table(name = "cartItems")
+public class CartItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    private Long itemId;
     private Long userId;
-
-    private String text;
-    private String date;
+    private Long itemId;
 }

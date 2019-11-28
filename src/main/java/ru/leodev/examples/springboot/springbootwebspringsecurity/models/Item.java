@@ -3,8 +3,10 @@ package ru.leodev.examples.springboot.springbootwebspringsecurity.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -17,8 +19,11 @@ public class Item {
     private Long id;
 
     private String name;
+    @Type(type = "text")
     private String description;
+    private String category;
     private String image;
     private Integer price;
     private Double rate;
+    private Date date;
 }

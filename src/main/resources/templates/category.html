@@ -78,79 +78,37 @@
     </div>
 </div>
 
-
-<div class="container">
-<div class="check">
-    <div class="col-md-3 cart-total">
-        <a class="continue" href="#">Продолжить покупки</a>
-        <div class="price-details">
-            <h3>Итог заказа</h3>
-            <span>Сумма</span>
-            <span class="total1" th:text="${sum}"></span>
-            <span>Скидка</span>
-            <span class="total1">---</span>
-            <span>Доставка</span>
-            <span class="total1">150.00</span>
-            <div class="clearfix"></div>
-        </div>
-        <ul class="total_price">
-            <li class="last_price"> <h4>Всего</h4></li>
-            <li class="last_price"><span th:text="${sum}"></span></li>
-            <div class="clearfix"> </div>
-        </ul>
-
-
-        <div class="clearfix"></div>
-        <div class="total-item">
-            <h3>Купоны</h3>
-            <a class="cpns" href="#">Применить купон</a>
-            <p><a href="#">Войдите,</a> чтобы  использовать купоны</p>
-        </div>
-    </div>
-    <div class="col-md-9 cart-items">
-        <h1>Моя корзина</h1>
-        <script>$(document).ready(function(c) {
-					$('.close1').on('click', function(c){
-						$('.cart-header').fadeOut('slow', function(c){
-							$('.cart-header').remove();
-						});
-						});
-					});
-			   </script>
-        <div class="cart-header" th:each="item : ${items}">
-            <div class="close1"> </div>
-            <div class="cart-sec simpleCart_shelfItem">
-                <div class="cart-item cyc">
-                    <img th:src="${item.image}" class="img-responsive" alt=""/>
-                </div>
-                <div class="cart-item-info">
-                    <h3><a href="#" th:text="${item.name}"></a><span></span></h3>
-
-                    <div class="delivery">
-                        <p >Стоимость: <span th:text="${item.name}"> </span></p>
-                        <span>Доставка 2-3 дня</span>
-                        <div class="clearfix"></div>
+<div class="content-middle">
+    <h2 style="text-align: center;
+		font-size: 3em;" >Все товары из категории <span th:text="${category}"></span></h2>
+    <div class="col-best">
+        <div class="col-md-4" th:each="item : ${items}">
+            <a th:href="@{'/item/{id}'(id=${item.id})}">
+                <div class="col-in">
+                    <div class="col-in-left">
+                        <img th:src="${item.image}" class="img-responsive" alt="" />
                     </div>
                 </div>
-                <div class="clearfix"></div>
-
+            </a>
+            <div class="col-in-right grid_1 simpleCart_shelfItem">
+                <h5 th:text="${item.name}"></h5>
+                <ul class="star">
+                    <li><a href="#"><i> </i> </a> </li>
+                    <li><a href="#"><i> </i> </a> </li>
+                    <li><a href="#"><i> </i> </a> </li>
+                    <li><i class="in-star"> </i> </li>
+                </ul>
+                <!---->
+                <a href="#" class="item_add"><span class="white item_price" th:text="${item.price}"> <i> </i> </span></a>
+                <!---->
             </div>
+            <div class="clearfix"> </div>
         </div>
-        <script>$(document).ready(function(c) {
-					$('.close2').on('click', function(c){
-							$('.cart-header2').fadeOut('slow', function(c){
-						$('.cart-header2').remove();
-					});
-					});
-					});
-			 </script>
-
     </div>
-
-
     <div class="clearfix"> </div>
 </div>
-</div>
+
+
 
 <div class="footer">
     <div class="container">
