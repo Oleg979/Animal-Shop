@@ -2,8 +2,14 @@ package ru.leodev.examples.springboot.springbootwebspringsecurity.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import ru.leodev.examples.springboot.springbootwebspringsecurity.models.Item;
+import ru.leodev.examples.springboot.springbootwebspringsecurity.models.Order;
+import ru.leodev.examples.springboot.springbootwebspringsecurity.models.User;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.repos.*;
+
+import java.util.List;
 
 @Controller("admin")
 public class AdminController {
@@ -27,17 +33,23 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public String users() {
-        return "/about";
+    public String users(Model model) {
+        List<User> users = userRepo.findAll();
+        model.addAttribute("users", users);
+        return "/admin-users";
     }
 
     @GetMapping("/orders")
-    public String orders() {
-        return "/about";
+    public String orders(Model model) {
+        List<Order> orders = orderRepo.findAll();
+        model.addAttribute("orders", orders);
+        return "/admin-orders";
     }
 
     @GetMapping("/items")
-    public String items() {
-        return "/about";
+    public String items(Model model) {
+        List<Item> items = itemRepo.findAll();
+        model.addAttribute("items", items);
+        return "/admin-items";
     }
 }
