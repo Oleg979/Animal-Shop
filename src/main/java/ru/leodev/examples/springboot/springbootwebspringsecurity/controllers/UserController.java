@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import ru.leodev.examples.springboot.springbootwebspringsecurity.models.CartItem;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.models.Item;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.models.Order;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.models.User;
