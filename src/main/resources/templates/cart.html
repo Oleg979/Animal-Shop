@@ -118,7 +118,10 @@
 					});
 			   </script>
         <div class="cart-header" th:each="item : ${items}">
-            <div class="close1"> </div>
+            <form method="post" th:action="@{'/item/{id}/deleteFromCart'(id=${item.id})}">
+                <button type="submit" id="deleteFromCart" class="cart" style="display:none"></button>
+                <div class="close1" onclick="document.querySelector('#deleteFromCart').click()"></div>
+            </form>
             <div class="cart-sec simpleCart_shelfItem">
                 <div class="cart-item cyc">
                     <img th:src="${item.image}" class="img-responsive" alt=""/>

@@ -4,8 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.models.*;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.repos.*;
 
@@ -54,9 +56,24 @@ public class UserController {
     }
 
     @GetMapping("/item/{id}")
-    public String user(@PathVariable Long id, Model model) {
+    public String user(@PathVariable Long id, Model model, Principal principal) {
         Item item = itemRepo.findOne(id);
+        Rate rate = rateRepo
+                .findAll()
+                .stream()
+                .filter(r -> r.getItemId().equals(id) && r.getUserId().equals(userRepo.findByEmail(principal.getName()).getId()))
+                .findFirst()
+                .orElse(null);
+        if(rate != null) {
+            model.addAttribute("rate", rate.getRate());
+        }
+        List<Comment> comments = commentRepo
+                .findAll()
+                .stream()
+                .filter(c -> c.getItemId().equals(id))
+                .collect(Collectors.toList());
         model.addAttribute("item", item);
+        model.addAttribute("comments", comments);
         return "/item";
     }
 
@@ -98,33 +115,20 @@ public class UserController {
         return "/profile";
     }
 
-    @PostMapping("/item/{id}/comment")
-    public RedirectView  addComment(@PathVariable Long id, @RequestParam String commentText, Principal principal) {
-        Comment comment = new Comment();
-        comment.setItemId(id);
-        comment.setDate(new Date());
-        comment.setUserName(principal.getName());
-        commentRepo.save(comment);
-        RedirectView rv = new RedirectView();
-        rv.setContextRelative(true);
-        rv.setUrl("item/{id}");
-        return rv;
-    }
+    //////////////////////////////////////////////
+
 
     @PostMapping("/item/{id}/addToCart")
-    public RedirectView  addToCart(@PathVariable Long id, Principal principal) {
+    public String  addToCart(@PathVariable Long id, Principal principal) {
         CartItem cartItem = new CartItem();
         cartItem.setItemId(id);
         cartItem.setUserId(userRepo.findByEmail(principal.getName()).getId());
         cartItemRepo.save(cartItem);
-        RedirectView rv = new RedirectView();
-        rv.setContextRelative(true);
-        rv.setUrl("item/{id}");
-        return rv;
+        return "redirect:/item/" + id;
     }
 
-    @DeleteMapping("/item/{id}/deleteFromCart")
-    public RedirectView  deleteFromCart(@PathVariable Long id, Principal principal) {
+    @PostMapping("/item/{id}/deleteFromCart")
+    public String  deleteFromCart(@PathVariable Long id, Principal principal) {
         Long userId = userRepo.findByEmail(principal.getName()).getId();
         CartItem item = cartItemRepo
                 .findAll()
@@ -133,10 +137,17 @@ public class UserController {
                 .findFirst()
                 .orElse(null);
         cartItemRepo.delete(item);
-        RedirectView rv = new RedirectView();
-        rv.setContextRelative(true);
-        rv.setUrl("/user/cart");
-        return rv;
+        return "redirect:/user/cart";
+    }
+
+    @PostMapping("/item/{id}/comment")
+    public String addComment(@PathVariable Long id, @RequestParam String commentText, Principal principal) {
+        Comment comment = new Comment();
+        comment.setItemId(id);
+        comment.setDate(new Date());
+        comment.setUserName(principal.getName());
+        commentRepo.save(comment);
+        return "redirect:/item/" + id;
     }
 
     @PostMapping("/order")
@@ -158,16 +169,14 @@ public class UserController {
     }
 
     @PostMapping("/item/{id}/rate")
-    public RedirectView rate(@PathVariable Long id, Principal principal, @RequestParam Integer amount) {
+    public String rate(@PathVariable Long id, Principal principal, @RequestParam Integer amount) {
+        log.info("rate = " + amount);
         Rate rate = new Rate();
         rate.setItemId(id);
         rate.setRate(amount);
         rate.setUserId(userRepo.findByEmail(principal.getName()).getId());
         rateRepo.save(rate);
-        RedirectView rv = new RedirectView();
-        rv.setContextRelative(true);
-        rv.setUrl("item/{id}");
-        return rv;
+        return "redirect:/item/" + id;
     }
 
     //////////////////////////////////////////////

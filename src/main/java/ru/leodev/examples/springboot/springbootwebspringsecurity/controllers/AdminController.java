@@ -11,7 +11,7 @@ import ru.leodev.examples.springboot.springbootwebspringsecurity.repos.*;
 
 import java.util.List;
 
-@Controller("admin")
+@Controller
 public class AdminController {
     private UserRepo userRepo;
     private ItemRepo itemRepo;
@@ -32,28 +32,28 @@ public class AdminController {
         this.cartItemRepo = cartItemRepo;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/admin/users")
     public String users(Model model) {
         List<User> users = userRepo.findAll();
         model.addAttribute("users", users);
         return "/admin-users";
     }
 
-    @GetMapping("/orders")
+    @GetMapping("/admin/orders")
     public String orders(Model model) {
         List<Order> orders = orderRepo.findAll();
         model.addAttribute("orders", orders);
         return "/admin-orders";
     }
 
-    @GetMapping("/items")
+    @GetMapping("/admin/items")
     public String items(Model model) {
         List<Item> items = itemRepo.findAll();
         model.addAttribute("items", items);
         return "/admin-items";
     }
 
-    @GetMapping
+    @GetMapping("/admin")
     public String admin() {
         return "/admin";
     }

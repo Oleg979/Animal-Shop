@@ -97,15 +97,18 @@
                         <p th:text="${item.category}"></p>
                         <div class="star-on">
                             <ul>
-                                <li><a href="#"><i> </i></a></li>
-                                <li><a href="#"><i> </i></a></li>
-                                <li><a href="#"><i> </i></a></li>
-                                <li><a href="#"><i> </i></a></li>
-                                <li><a href="#"><i> </i></a></li>
+                                <form method="post" th:action="@{'/item/{id}/rate'(id=${item.id})}">
+                                    <input type="number" name="amount" style="display:none" id="rate-input"/>
+                                    <button type="submit" style="display:none" id="send-rate"></button>
+                                    <li onclick="document.querySelector('#rate-input').value = 1; document.querySelector('#send-rate').click()"><a href="#"><i> </i></a></li>
+                                    <li onclick="document.querySelector('#rate-input').value = 2; document.querySelector('#send-rate').click()"><a href="#"><i> </i></a></li>
+                                    <li onclick="document.querySelector('#rate-input').value = 3; document.querySelector('#send-rate').click()"><a href="#"><i> </i></a></li>
+                                    <li onclick="document.querySelector('#rate-input').value = 4; document.querySelector('#send-rate').click()"><a href="#"><i> </i></a></li>
+                                    <li onclick="document.querySelector('#rate-input').value = 5; document.querySelector('#send-rate').click()"><a href="#"><i> </i></a></li>
+                                </form>
                             </ul>
                             <div class="review">
-                                <a href="#"> 3 комментария </a>/
-                                <a href="#">  Оставить комментарий</a>
+                                <p> <span th:text="${item.rate}"></span><span th:text="${rate != null} ? ' (Вы оценили этот товар на ' + ${rate} + ')' : ' (Вы ещё не оценили этот товар)'"></span></p>
                             </div>
                             <div class="clearfix"> </div>
                         </div>
@@ -113,8 +116,10 @@
                         <label  class="add-to" th:text="${item.price}"></label>
 
 
-
-                        <a href="#" class="cart ">Купить</a>
+                        <form method="post" th:action="@{'/item/{id}/addToCart'(id=${item.id})}">
+                            <button type="submit" id="addToCart" class="cart" style="display:none"></button>
+                            <a href="#" class="cart" onclick="document.querySelector('#addToCart').click()">Купить</a>
+                        </form>
 
                     </div>
                 </div>
