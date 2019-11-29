@@ -52,4 +52,9 @@ public class AdminController {
         model.addAttribute("items", items);
         return "/admin-items";
     }
+
+    @GetMapping
+    public String admin() {
+        return "/admin";
+    }
 }

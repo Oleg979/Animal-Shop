@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -17,8 +18,8 @@ public class Comment {
     private Long id;
 
     private Long itemId;
-    private Long userId;
+    private String userName;
 
     private String text;
-    private String date;
+    private Date date;
 }

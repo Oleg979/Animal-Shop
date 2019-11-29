@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,6 +19,9 @@ public class Order {
     private Long id;
 
     private Long userId;
-    private Item[] items;
-    private String date;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Item.class)
+    @JoinTable(name = "orders_items", joinColumns = { @JoinColumn(name = "item_id") }, inverseJoinColumns = { @JoinColumn(name = "order_id") })
+    private List<Item> items;
+    private Date date;
 }

@@ -4,15 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import ru.leodev.examples.springboot.springbootwebspringsecurity.models.Item;
-import ru.leodev.examples.springboot.springbootwebspringsecurity.models.Order;
-import ru.leodev.examples.springboot.springbootwebspringsecurity.models.User;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
+import ru.leodev.examples.springboot.springbootwebspringsecurity.models.*;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.repos.*;
 
 import java.security.Principal;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -97,6 +96,78 @@ public class UserController {
         model.addAttribute("orders", orders);
         model.addAttribute("logged", user);
         return "/profile";
+    }
+
+    @PostMapping("/item/{id}/comment")
+    public RedirectView  addComment(@PathVariable Long id, @RequestParam String commentText, Principal principal) {
+        Comment comment = new Comment();
+        comment.setItemId(id);
+        comment.setDate(new Date());
+        comment.setUserName(principal.getName());
+        commentRepo.save(comment);
+        RedirectView rv = new RedirectView();
+        rv.setContextRelative(true);
+        rv.setUrl("item/{id}");
+        return rv;
+    }
+
+    @PostMapping("/item/{id}/addToCart")
+    public RedirectView  addToCart(@PathVariable Long id, Principal principal) {
+        CartItem cartItem = new CartItem();
+        cartItem.setItemId(id);
+        cartItem.setUserId(userRepo.findByEmail(principal.getName()).getId());
+        cartItemRepo.save(cartItem);
+        RedirectView rv = new RedirectView();
+        rv.setContextRelative(true);
+        rv.setUrl("item/{id}");
+        return rv;
+    }
+
+    @DeleteMapping("/item/{id}/deleteFromCart")
+    public RedirectView  deleteFromCart(@PathVariable Long id, Principal principal) {
+        Long userId = userRepo.findByEmail(principal.getName()).getId();
+        CartItem item = cartItemRepo
+                .findAll()
+                .stream()
+                .filter(cartItem -> cartItem.getItemId().equals(id) && cartItem.getUserId().equals(userId))
+                .findFirst()
+                .orElse(null);
+        cartItemRepo.delete(item);
+        RedirectView rv = new RedirectView();
+        rv.setContextRelative(true);
+        rv.setUrl("/user/cart");
+        return rv;
+    }
+
+    @PostMapping("/order")
+    public String createOrder(Principal principal) {
+        Long userId = userRepo.findByEmail(principal.getName()).getId();
+        List<Item> items = cartItemRepo
+                .findAll()
+                .stream()
+                .filter(cartItem -> cartItem.getUserId().equals(userId))
+                .map(cartItem -> itemRepo.getOne(cartItem.getItemId()))
+                .peek(item -> cartItemRepo.deleteByItemId(item.getId()))
+                .collect(Collectors.toList());
+        Order order = new Order();
+        order.setItems(items);
+        order.setDate(new Date());
+        order.setUserId(userId);
+        orderRepo.save(order);
+        return "redirect:/user/cart";
+    }
+
+    @PostMapping("/item/{id}/rate")
+    public RedirectView rate(@PathVariable Long id, Principal principal, @RequestParam Integer amount) {
+        Rate rate = new Rate();
+        rate.setItemId(id);
+        rate.setRate(amount);
+        rate.setUserId(userRepo.findByEmail(principal.getName()).getId());
+        rateRepo.save(rate);
+        RedirectView rv = new RedirectView();
+        rv.setContextRelative(true);
+        rv.setUrl("item/{id}");
+        return rv;
     }
 
     //////////////////////////////////////////////
