@@ -12,9 +12,7 @@ import ru.leodev.examples.springboot.springbootwebspringsecurity.models.*;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.repos.*;
 
 import java.security.Principal;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -51,8 +49,8 @@ public class UserController {
     }
 
     @GetMapping("/403")
-    public String error403() {
-        return "/error/403";
+    public String error() {
+        return "/403";
     }
 
     @GetMapping("/item/{id}")
@@ -72,8 +70,17 @@ public class UserController {
                 .stream()
                 .filter(c -> c.getItemId().equals(id))
                 .collect(Collectors.toList());
+
+        List<Item> tmp = itemRepo.findAll();
+        List<Item> suggestions = new ArrayList<>();
+        Random random = new Random();
+        suggestions.add(tmp.get(random.nextInt(tmp.size())));
+        suggestions.add(tmp.get(random.nextInt(tmp.size())));
+        suggestions.add(tmp.get(random.nextInt(tmp.size())));
+        model.addAttribute("suggestions", suggestions);
         model.addAttribute("item", item);
         model.addAttribute("comments", comments);
+        model.addAttribute("commentsLength", comments.size());
         return "/item";
     }
 
@@ -140,13 +147,14 @@ public class UserController {
         return "redirect:/user/cart";
     }
 
-    @PostMapping("/item/{id}/comment")
+    @PostMapping("/item/{id}/addComment")
     public String addComment(@PathVariable Long id, @RequestParam String commentText, Principal principal) {
         Comment comment = new Comment();
         comment.setItemId(id);
         comment.setDate(new Date());
         comment.setUserName(principal.getName());
         commentRepo.save(comment);
+        log.info("Добавлен комментарий: " + commentText);
         return "redirect:/item/" + id;
     }
 
@@ -191,7 +199,7 @@ public class UserController {
                                 .collect(Collectors.toList());
         List<Item> topItems = all
                                 .stream()
-                                .sorted()
+                                .sorted(Comparator.comparing(Item::getPrice))
                                 .limit(3)
                                 .collect(Collectors.toList());
         model.addAttribute("newItems", newItems);

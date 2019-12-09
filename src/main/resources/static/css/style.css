@@ -553,6 +553,7 @@ padding:4em 0;
 }
 .col-in-left{
 	float:left;
+	width: 40%;
 }
 .col-in-right{
 	float:right;
@@ -1448,6 +1449,7 @@ ul.header-in li a {
 }
 .col-md-4 {
   width: 33.3%;
+  background-color: white;
 }
 .banner-top-in {
   width: 40%;
@@ -1490,6 +1492,7 @@ h2.middle:after, h2.middle:before {
 }
 .col-md-4{
 	float:left;
+	background-color: white;
 	width:33.3%;
 }
 .col-in {
@@ -1722,6 +1725,7 @@ span.white {
 }
 .col-md-4 {
   width: 100%;
+  background-color: white;
   margin-top: 1em;
 }
 .search-top {
@@ -1932,6 +1936,7 @@ ul.star {
 }
 .col-md-4 {
   padding: 0;
+  background-color: white;
 }
 .content-bottom {
   padding: 1em 0.5em;
