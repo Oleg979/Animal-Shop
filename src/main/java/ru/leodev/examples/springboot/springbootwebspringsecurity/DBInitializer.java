@@ -38,18 +38,19 @@ public class DBInitializer {
                     "Размер породы: средние породы\n" +
                     "Особые потребности: чувствительное пищеварение\n" +
                     "Лечебный: нет", "Кормы для животных", "https://sun9-22.userapi.com/c858532/v858532301/6e78c/j7nexb0v43U.jpg", 540, 4.5, new Date()));
-            itemRepo.save(new Item(4L, "Корм для шиншилл Versel",
+            itemRepo.save(new Item(5L, "Корм для шиншилл Versel",
                     "Тип: комбинированный корм\n" +
                             "Назначение: для шиншилл\n" +
                             "Возраст животного: для взрослых", "Кормы для животных", "https://sun9-29.userapi.com/c858532/v858532301/6e6ce/2bTS9SFXPyQ.jpg", 424, 4.5, new Date()));
-            itemRepo.save(new Item(5L, "Корм для крыс Little One Rats",
+            itemRepo.save(new Item(6L, "Корм для крыс Little One Rats",
                     "Тип: комбинированный корм\n" +
                             "Назначение: для мышей и крыс\n", "Кормы для животных", "https://sun9-3.userapi.com/c858532/v858532301/6e6df/HBjW8qw4Zy8.jpg", 95, 4.5, new Date()));
 
 
 
 
-            userRepo.save(new User(1L, "olegsolovev506@gmail.com", "password"));
+            userRepo.save(new User(1L, "olegsolovev506@gmail.com", "1234"));
+            userRepo.save(new User(2L, "admin", "pass"));
         };
     }
 }

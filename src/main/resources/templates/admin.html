@@ -1,26 +1,153 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="fragments/header :: header-css"/>
+    <title>Spring Security Example </title>
+    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css" />
+    <script th:src="@{/js/jquery.min.js}" src="../../js/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <link href='http://fonts.googleapis.com/css?family=Amaranth:400,700' rel='stylesheet' type='text/css'/>
+    <script th:src="@{/js/move-top.js}" src="../../js/move-top.js"></script>
+    <script th:src="@{/js/easing.js}" src="../../js/easing.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+            $(".scroll").click(function(event){
+                event.preventDefault();
+                $('html,body').animate({scrollTop:$(this.hash).offset().top},1000);
+            });
+        });
+    </script>
+    <!-- start menu -->
+    <link rel="stylesheet" th:href="@{/css/megamenu.css}" href="../../css/megamenu.css" />
+    <link href="https://fonts.googleapis.com/css?family=Caveat&amp;display=swap" rel="stylesheet"/>
+    <script th:src="@{/js/megamenu.js}" src="../../js/megamenu.js"></script>
+    <script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
+    <style>
+        body {
+            font-family: 'Caveat', cursive;
+            font-size: 2em;
+
+        }
+        .banner-top {
+            font-size: initial;
+        }
+    </style>
 </head>
 <body>
 
-<div th:replace="fragments/header :: header"/>
-<div class="container">
+<div class="header" >
+    <div class="top-header" >
+        <div class="container">
+            <div class="top-head" >
+                <div class="header-para">
 
-    <div class="starter-template">
-        <h1>Admin page (Spring Security protected)</h1>
-        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
-        </form>
+                </div>
+                <!-- <div class="logo">
+                    <a href="index.html"><img src="images/logo.png" alt="" ></a>
+                </div> -->
+                <ul class="header-in" style="font-size: 2em; width: -webkit-fill-available; margin-top: 0 !important;">
+                    <li ><a th:href="@{/}" >Каталог товаров</a></li>
+                    <li><a th:href="@{/user/profile}">Мой профиль</a> </li>
+                    <li><a th:href="@{/about}">Связаться с нами</a></li>
+                    <!-- 				<li ><a href="#" >   how to use</a></li>
+                     -->			</ul>
 
+                <div class="clearfix"> </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
     </div>
+</div>
+
+<div class="header-top">
+    <div class="container">
+        <div class="head-top">
+
+            <div class="top-nav" style="font-family: 'Caveat', cursive;">
+                <ul class="megamenu skyblue">
+                    <li class="active grid"><a   th:href="@{/catalog/Кормы для животных}">Кормы для животных</a>
+
+                    </li>
+                    <li><a   th:href="@{/catalog/Аксессуары}">Аксессуары</a>
+                    </li>
+                    <li class="grid"><a th:href="@{/catalog/Лежаки и домики}">Лежаки и домики</a>
+
+                    </li>
+                    <li class="grid"><a  th:href="@{/catalog/Витамины и добавки}">Витамины и добавки</a>
+
+                    </li>
+                    <li><a  th:href="@{/catalog/Одежда}">Одежда</a>
+                    </li>
+
+
+                </ul>
+            </div>
+
+
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <a class="continue" th:href="@{/admin/addItem}">Добавить товар</a>
+    <h1>Доступные товары:</h1>
+    <div th:each="item: ${items}">
+        <form method="post" th:action="@{'/admin/deleteItem/{id}'(id=${item.id})}"><button type="submit" id="delete" style="display:none"></button> </form>
+        <div class="alert alert-info" style="display: flex;
+    justify-content: space-between;">
+            <h2 th:text="${item.name} + ' (' + ${item.price} + ') руб'"></h2>
+            <h2 onclick="document.getElementById('delete').click()" style="cursor:pointer">X</h2>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="container">
+        <div class="col-md-3 footer-left">
+            <a href="index.html"><img src="images/logo.png" alt=""/></a>
+            <p class="footer-class">© 2019 PetsShop Все права защищены</p>
+        </div>
+        <div class="col-md-2 footer-middle">
+            <ul>
+                <li><a href="404.html">О нас</a> </li>
+                <li><a href="contact.html">   Обратная связь</a></li>
+            </ul>
+        </div>
+        <div class="col-md-3 footer-right">
+            <h5>МЫ ПРИНИМАЕМ ОПЛАТУ:</h5>
+            <ul>
+                <li><a href="#"><i> </i></a> </li>
+                <li><a href="#"><i class="we"> </i></a></li>
+                <li ><a href="#" ><i class="we-in"> </i></a></li>
+                <li ><a href="#" ><i class="we-at"> </i></a></li>
+                <li ><a href="#" ><i class="we-at-at"> </i></a></li>
+            </ul>
+        </div>
+        <div class="clearfix"> </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            /*
+            var defaults = {
+                  containerID: 'toTop', // fading element id
+                containerHoverID: 'toTopHover', // fading element hover id
+                scrollSpeed: 1200,
+                easingType: 'linear'
+             };
+            */
+
+            $().UItoTop({ easingType: 'easeOutQuart' });
+            $(".wmuSliderPagination").hide();
+
+        });
+    </script>
+    <a href="#" id="toTop" style="display: block;"> <span id="toTopHover" style="opacity: 1;"> </span></a>
 
 </div>
-<!-- /.container -->
-
-<div th:replace="fragments/footer :: footer"/>
 
 </body>
 </html>

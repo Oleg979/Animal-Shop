@@ -85,10 +85,9 @@
             <div class="cart box_1">
                 <a th:href="@{/user/cart}">
                     <h3> <div class="total">
-                        <span class="simpleCart_total">0 руб</span> (<span id="simpleCart_quantity" class="simpleCart_quantity">0</span> товаров)</div>
-                        <img src="images/cart.png" alt=""/></h3>
+                        <span class="simpleCart_total">Корзина</span> (<span id="simpleCart_quantity" class="simpleCart_quantity" th:text="${cartSum}"></span> руб)</div>
+                        <img th:src="@{images/cart.png}" alt=""/></h3>
                 </a>
-                <p><a href="javascript:;" class="simpleCart_empty"><img src="images/cart-c.png" alt=""/></a></p>
                 <div class="clearfix"> </div>
             </div>
 

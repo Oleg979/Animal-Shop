@@ -39,18 +39,31 @@ public class UserController {
         this.cartItemRepo = cartItemRepo;
     }
 
+    public int getCartSum(Principal principal) {
+        return cartItemRepo
+                .findAllByUserId(userRepo.findByEmail(principal.getName()).getId())
+                .stream()
+                .map(CartItem::getItemId)
+                .map(itemRepo::findOne)
+                .map(Item::getPrice)
+                .reduce(Integer::sum)
+                .orElse(0);
+    }
+
     @GetMapping("/about")
-    public String about() {
+    public String about(Model model, Principal principal) {
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/about";
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
         return "/login";
     }
 
     @GetMapping("/403")
-    public String error() {
+    public String error(Model model, Principal principal) {
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/403";
     }
 
@@ -82,14 +95,16 @@ public class UserController {
         model.addAttribute("item", item);
         model.addAttribute("comments", comments);
         model.addAttribute("commentsLength", comments.size());
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/item";
     }
 
     @GetMapping("/catalog/{category}")
-    public String catalog(@PathVariable String category, Model model) {
+    public String catalog(@PathVariable String category, Model model, Principal principal) {
         List<Item> items = itemRepo.findAllByCategory(category);
         model.addAttribute("items", items);
         model.addAttribute("category", category);
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/category";
     }
 
@@ -110,6 +125,7 @@ public class UserController {
                             .orElse(0);
         model.addAttribute("items", items);
         model.addAttribute("sum", sum);
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/cart";
     }
 
@@ -120,6 +136,7 @@ public class UserController {
         List<Order> orders = orderRepo.findAllByUserId(user.getId());
         model.addAttribute("orders", orders);
         model.addAttribute("logged", user);
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/profile";
     }
 
@@ -192,7 +209,7 @@ public class UserController {
     //////////////////////////////////////////////
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, Principal principal) {
         List<Item> all = itemRepo.findAll();
         List<Item> newItems = all
                                 .stream()
@@ -206,6 +223,7 @@ public class UserController {
                                 .collect(Collectors.toList());
         model.addAttribute("newItems", newItems);
         model.addAttribute("topItems", topItems);
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/index";
     }
 }
