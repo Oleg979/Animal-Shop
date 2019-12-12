@@ -100,11 +100,20 @@
 <div class="container">
 
     <div class="starter-template">
-        <h1>User page (Spring Security protected)</h1>
-        <h1 th:text="${logged.email}"></h1>
+        <h1 th:text="'Моя электронная почта: ' + ${logged.email}" style="margin-bottom: 20px"></h1>
         <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
+            <input type="submit" value="Sign Out" style="display: none" id="logout"/>
         </form>
+        <a class="continue" href="#" onclick="document.getElementById('logout').click()">Выйти из профиля</a>
+        <h1>Мои заказы:</h1>
+        <div th:each="order: ${orders}">
+            <div class="alert alert-info">
+                <h2 th:text="'Заказ от ' +  ${order.date}"></h2>
+                <div th:each="item: ${order.items}">
+                    <p th:text="${item.name}"></p>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>

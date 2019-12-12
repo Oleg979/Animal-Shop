@@ -100,7 +100,11 @@
 <div class="container">
 <div class="check">
     <div class="col-md-3 cart-total">
-        <a class="continue" href="#">Продолжить покупки</a>
+        <a class="continue" th:href="@{/catalog/Кормы для животных}">Продолжить покупки</a>
+        <form method="post" th:action="@{/order}">
+            <button type="submit" style="display: none" id="order"></button>
+        </form>
+        <a class="continue" href="#" onclick="document.getElementById('order').click()">Оформить заказ</a>
         <div class="price-details">
             <h3>Итог заказа</h3>
             <span>Сумма</span>
@@ -119,11 +123,7 @@
 
 
         <div class="clearfix"></div>
-        <div class="total-item">
-            <h3>Купоны</h3>
-            <a class="cpns" href="#">Применить купон</a>
-            <p><a href="#">Войдите,</a> чтобы  использовать купоны</p>
-        </div>
+
     </div>
     <div class="col-md-9 cart-items">
         <h1>Моя корзина</h1>
@@ -145,10 +145,10 @@
                     <img th:src="${item.image}" class="img-responsive" alt=""/>
                 </div>
                 <div class="cart-item-info">
-                    <h3><a href="#" th:text="${item.name}"></a><span></span></h3>
+                    <h3><a th:href="@{'/item/{id}'(id=${item.id})}" th:text="${item.name}"></a><span></span></h3>
 
                     <div class="delivery">
-                        <p >Стоимость: <span th:text="${item.name}"> </span></p>
+                        <p >Стоимость: <span th:text="${item.price} +  ' Р'"> </span></p>
                         <span>Доставка 2-3 дня</span>
                         <div class="clearfix"></div>
                     </div>

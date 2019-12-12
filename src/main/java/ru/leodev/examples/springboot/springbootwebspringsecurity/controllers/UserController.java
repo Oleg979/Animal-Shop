@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.models.*;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.repos.*;
 
+import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -153,12 +154,13 @@ public class UserController {
         comment.setItemId(id);
         comment.setDate(new Date());
         comment.setUserName(principal.getName());
+        comment.setText(commentText);
         commentRepo.save(comment);
-        log.info("Добавлен комментарий: " + commentText);
         return "redirect:/item/" + id;
     }
 
     @PostMapping("/order")
+    @Transactional
     public String createOrder(Principal principal) {
         Long userId = userRepo.findByEmail(principal.getName()).getId();
         List<Item> items = cartItemRepo
@@ -166,11 +168,11 @@ public class UserController {
                 .stream()
                 .filter(cartItem -> cartItem.getUserId().equals(userId))
                 .map(cartItem -> itemRepo.getOne(cartItem.getItemId()))
-                .peek(item -> cartItemRepo.deleteByItemId(item.getId()))
                 .collect(Collectors.toList());
+        cartItemRepo.deleteByUserId(userId);
         Order order = new Order();
-        order.setItems(items);
         order.setDate(new Date());
+        order.setItems(items);
         order.setUserId(userId);
         orderRepo.save(order);
         return "redirect:/user/cart";

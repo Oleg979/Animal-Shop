@@ -181,11 +181,20 @@
                         </div>
                         </div>
                         <li class="resp-tab-item" aria-controls="tab_item-2" role="tab"><span th:text="'Комментарии(' + ${commentsLength} + ')'"></span></li>
+                        <br/>
+                        <div style="visibility: hidden">
+                            <span>asdasdasdasdsad</span>
+                        </div>
+                        <div th:each="comment : ${comments}" style="margin-bottom: 20px">
+                            <div>
+                                <span th:text="${comment.userName}"></span>: <span th:text="${comment.text}"></span>
+                            </div>
+                        </div>
                         <form method="post" th:action="@{'/item/{id}/addComment'(id=${item.id})}">
-
                         <div class="form-group">
-                            <label for="exampleFormControlTextarea1">Example textarea</label>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="commentText"></textarea>
+                            <button type="submit" id="addComment" class="cart" style="display:none"></button>
+                            <a href="#" class="cart" onclick="document.querySelector('#addComment').click()">Отправить</a>
                         </div>
                         </form>
 
@@ -209,7 +218,7 @@
                     <div class="product-go" th:each="suggestion : ${suggestions}">
                         <img class="img-responsive fashion" th:src="${suggestion.image}" alt=""/>
                         <div class="grid-product">
-                            <a href="#" class="elit" th:text="${suggestion.name}"></a>
+                            <a th:href="@{'/item/{id}'(id=${suggestion.id})}" class="elit" th:text="${suggestion.name}"></a>
                             <span class=" price-in" th:text="${suggestion.price + ' Руб'}"></span>
                         </div>
                         <div class="clearfix"> </div>
