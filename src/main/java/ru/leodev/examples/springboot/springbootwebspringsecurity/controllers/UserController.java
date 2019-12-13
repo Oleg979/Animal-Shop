@@ -3,11 +3,14 @@ package ru.leodev.examples.springboot.springbootwebspringsecurity.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.leodev.examples.springboot.springbootwebspringsecurity.config.SecurityService;
+import ru.leodev.examples.springboot.springbootwebspringsecurity.config.UserService;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.models.*;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.repos.*;
 
@@ -27,9 +30,11 @@ public class UserController {
     private OrderRepo orderRepo;
     private DiscountRepo discountRepo;
     private CartItemRepo cartItemRepo;
+    private UserService userService;
+    private SecurityService securityService;
 
     @Autowired
-    public UserController(UserRepo userRepo, ItemRepo itemRepo, RateRepo rateRepo, CommentRepo commentRepo, OrderRepo orderRepo, DiscountRepo discountRepo, CartItemRepo cartItemRepo) {
+    public UserController(SecurityService securityService, UserService userService, UserRepo userRepo, ItemRepo itemRepo, RateRepo rateRepo, CommentRepo commentRepo, OrderRepo orderRepo, DiscountRepo discountRepo, CartItemRepo cartItemRepo) {
         this.userRepo = userRepo;
         this.itemRepo = itemRepo;
         this.rateRepo = rateRepo;
@@ -37,16 +42,45 @@ public class UserController {
         this.orderRepo = orderRepo;
         this.discountRepo = discountRepo;
         this.cartItemRepo = cartItemRepo;
+        this.userService = userService;
+        this.securityService = securityService;
+    }
+
+    public int getCartSum(Principal principal) {
+        return cartItemRepo
+                .findAllByUserId(userRepo.findByEmail(principal.getName()).getId())
+                .stream()
+                .map(CartItem::getItemId)
+                .map(itemRepo::findOne)
+                .map(Item::getPrice)
+                .reduce(Integer::sum)
+                .orElse(0);
     }
 
     @GetMapping("/about")
-    public String about() {
+    public String about(Model model, Principal principal) {
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/about";
     }
 
     @GetMapping("/login")
     public String login() {
         return "/login";
+    }
+
+    @GetMapping("/registration")
+    public String registration() {
+        return "/registration";
+    }
+
+    @PostMapping("/registration")
+    public String signup(@RequestParam String username, @RequestParam String password, @RequestParam String passwordConfirm) {
+        User user = new User();
+        user.setPassword(password);
+        user.setPasswordConfirm(passwordConfirm);
+        user.setEmail(username);
+        userService.save(user);
+        return "redirect:/login";
     }
 
     @GetMapping("/403")
@@ -82,14 +116,16 @@ public class UserController {
         model.addAttribute("item", item);
         model.addAttribute("comments", comments);
         model.addAttribute("commentsLength", comments.size());
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/item";
     }
 
     @GetMapping("/catalog/{category}")
-    public String catalog(@PathVariable String category, Model model) {
+    public String catalog(@PathVariable String category, Model model, Principal principal) {
         List<Item> items = itemRepo.findAllByCategory(category);
         model.addAttribute("items", items);
         model.addAttribute("category", category);
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/category";
     }
 
@@ -110,6 +146,7 @@ public class UserController {
                             .orElse(0);
         model.addAttribute("items", items);
         model.addAttribute("sum", sum);
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/cart";
     }
 
@@ -120,6 +157,7 @@ public class UserController {
         List<Order> orders = orderRepo.findAllByUserId(user.getId());
         model.addAttribute("orders", orders);
         model.addAttribute("logged", user);
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/profile";
     }
 
@@ -192,7 +230,7 @@ public class UserController {
     //////////////////////////////////////////////
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, Principal principal) {
         List<Item> all = itemRepo.findAll();
         List<Item> newItems = all
                                 .stream()
@@ -206,6 +244,7 @@ public class UserController {
                                 .collect(Collectors.toList());
         model.addAttribute("newItems", newItems);
         model.addAttribute("topItems", topItems);
+        model.addAttribute("cartSum", getCartSum(principal));
         return "/index";
     }
 }

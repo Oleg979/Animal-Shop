@@ -8,21 +8,18 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "roles")
+public class Role {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    private String email;
-    private String password;
+    private String name;
 
-    @Transient
-    private String passwordConfirm;
-
-    @ManyToMany
-    private Set<Role> roles;
+    public Role(String name) {
+        this.name = name;
+    }
 }

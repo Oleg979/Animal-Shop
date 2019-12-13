@@ -1,8 +1,6 @@
-<!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Spring Boot Thymeleaf + Spring Security</title>
-
     <link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css" />
     <script th:src="@{/js/jquery.min.js}" src="../../js/jquery.min.js"></script>
@@ -88,10 +86,9 @@
             <div class="cart box_1">
                 <a th:href="@{/user/cart}">
                     <h3> <div class="total">
-                        <span class="simpleCart_total">0 руб</span> (<span id="simpleCart_quantity" class="simpleCart_quantity">0</span> товаров)</div>
-                        <img src="images/cart.png" alt=""/></h3>
+                        <span class="simpleCart_total">Корзина</span> (<span id="simpleCart_quantity" class="simpleCart_quantity" th:text="${cartSum}"></span> руб)</div>
+                        <img th:src="@{/images/cart.png}" alt=""/></h3>
                 </a>
-                <p><a href="javascript:;" class="simpleCart_empty"><img src="images/cart-c.png" alt=""/></a></p>
                 <div class="clearfix"> </div>
             </div>
 
