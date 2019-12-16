@@ -50,6 +50,7 @@
                     <li ><a th:href="@{/}" >Каталог товаров</a></li>
                     <li><a th:href="@{/user/profile}">Мой профиль</a> </li>
                     <li><a th:href="@{/about}">Связаться с нами</a></li>
+                    <li th:if="${isAdmin}"><a th:href="@{/admin}">Управление</a></li>
                     <!-- 				<li ><a href="#" >   how to use</a></li>
                      -->			</ul>
 
@@ -146,7 +147,6 @@
 <div class="footer">
     <div class="container">
         <div class="col-md-3 footer-left">
-            <a href="index.html"><img src="images/logo.png" alt=""/></a>
             <p class="footer-class">© 2019 PetsShop Все права защищены</p>
         </div>
         <div class="col-md-2 footer-middle">

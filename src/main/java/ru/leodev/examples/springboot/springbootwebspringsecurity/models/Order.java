@@ -24,4 +24,5 @@ public class Order {
     @JoinTable(name = "orders_items", joinColumns = { @JoinColumn(name = "item_id") }, inverseJoinColumns = { @JoinColumn(name = "order_id") })
     private List<Item> items;
     private Date date;
+    private String status;
 }

@@ -4,10 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.leodev.examples.springboot.springbootwebspringsecurity.models.Role;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.models.User;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.repos.RoleRepo;
 import ru.leodev.examples.springboot.springbootwebspringsecurity.repos.UserRepo;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 @Service
@@ -23,7 +25,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void save(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(new HashSet<>(roleRepo.findAll()));
+        Role userRole = roleRepo.findAll().stream().filter(r -> r.getName().equals("ROLE_USER")).findFirst().get();
+        user.setRoles(new HashSet<>(Arrays.asList(userRole)));
         log.info(user.getEmail() + " has roles: " + user.getRoles().toString());
         userRepo.save(user);
     }

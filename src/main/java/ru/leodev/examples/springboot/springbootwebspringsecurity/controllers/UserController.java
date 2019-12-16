@@ -57,9 +57,19 @@ public class UserController {
                 .orElse(0);
     }
 
+    public boolean isAdmin(Principal principal) {
+        return userRepo
+                .findByEmail(principal.getName())
+                .getRoles()
+                .stream()
+                .map(Role::getName)
+                .anyMatch("ROLE_ADMIN"::equals);
+    }
+
     @GetMapping("/about")
     public String about(Model model, Principal principal) {
         model.addAttribute("cartSum", getCartSum(principal));
+        model.addAttribute("isAdmin", isAdmin(principal));
         return "/about";
     }
 
@@ -117,6 +127,7 @@ public class UserController {
         model.addAttribute("comments", comments);
         model.addAttribute("commentsLength", comments.size());
         model.addAttribute("cartSum", getCartSum(principal));
+        model.addAttribute("isAdmin", isAdmin(principal));
         return "/item";
     }
 
@@ -126,6 +137,7 @@ public class UserController {
         model.addAttribute("items", items);
         model.addAttribute("category", category);
         model.addAttribute("cartSum", getCartSum(principal));
+        model.addAttribute("isAdmin", isAdmin(principal));
         return "/category";
     }
 
@@ -147,6 +159,7 @@ public class UserController {
         model.addAttribute("items", items);
         model.addAttribute("sum", sum);
         model.addAttribute("cartSum", getCartSum(principal));
+        model.addAttribute("isAdmin", isAdmin(principal));
         return "/cart";
     }
 
@@ -158,6 +171,7 @@ public class UserController {
         model.addAttribute("orders", orders);
         model.addAttribute("logged", user);
         model.addAttribute("cartSum", getCartSum(principal));
+        model.addAttribute("isAdmin", isAdmin(principal));
         return "/profile";
     }
 
@@ -212,6 +226,7 @@ public class UserController {
         order.setDate(new Date());
         order.setItems(items);
         order.setUserId(userId);
+        order.setStatus("Активен");
         orderRepo.save(order);
         return "redirect:/user/cart";
     }
@@ -245,6 +260,7 @@ public class UserController {
         model.addAttribute("newItems", newItems);
         model.addAttribute("topItems", topItems);
         model.addAttribute("cartSum", getCartSum(principal));
+        model.addAttribute("isAdmin", isAdmin(principal));
         return "/index";
     }
 }

@@ -50,6 +50,7 @@
                     <li ><a th:href="@{/}" >Каталог товаров</a></li>
                     <li><a th:href="@{/user/profile}">Мой профиль</a> </li>
                     <li><a th:href="@{/about}">Связаться с нами</a></li>
+                    <li><a th:href="@{/admin}">Управление</a></li>
                     <!-- 				<li ><a href="#" >   how to use</a></li>
                      -->			</ul>
 
@@ -95,11 +96,56 @@
     <a class="continue" th:href="@{/admin/addItem}">Добавить товар</a>
     <h1>Доступные товары:</h1>
     <div th:each="item: ${items}">
-        <form method="post" th:action="@{'/admin/deleteItem/{id}'(id=${item.id})}"><button type="submit" id="delete" style="display:none"></button> </form>
+        <form method="post" th:action="@{'/admin/deleteItem/{id}'(id=${item.id})}"><button type="submit" th:id="'delete' + ${item.id}" style="display:none"></button> </form>
         <div class="alert alert-info" style="display: flex;
     justify-content: space-between;">
             <h2 th:text="${item.name} + ' (' + ${item.price} + ') руб'"></h2>
-            <h2 onclick="document.getElementById('delete').click()" style="cursor:pointer">X</h2>
+            <h2 th:onclick="'delete' + ${item.id} + '.click()'" style="cursor:pointer">X</h2>
+        </div>
+    </div>
+    <h1>Активные заказы клиентов:</h1>
+    <div th:each="order: ${orders}">
+        <div class="alert alert-info" style="justify-content: space-between;
+    display: flex;">
+            <div>
+            <h2 th:text="'Заказ от ' +  ${order.order.date} + ' клиента ' + ${order.user.email}"></h2>
+                <form method="post" th:action="@{'/admin/acceptOrder/{id}'(id=${order.order.id})}"><button type="submit" th:id="'accept' + ${order.order.id}" style="display:none"></button> </form>
+                <form method="post" th:action="@{'/admin/rejectOrder/{id}'(id=${order.order.id})}"><button type="submit" th:id="'reject' + ${order.order.id}" style="display:none"></button> </form>
+                <div th:each="item: ${order.order.items}" style="display: flex;
+        justify-content: space-between;">
+                    <p th:text="${item.name}"></p>
+                </div>
+            </div>
+            <div style="display:flex">
+                <h2 th:onclick="'accept' + ${order.order.id} + '.click()'" style="cursor:pointer; margin-right: 20px;">✔</h2>
+                <h2 th:onclick="'reject' + ${order.order.id} + '.click()'" style="cursor:pointer">X</h2>
+            </div>
+        </div>
+    </div>
+    <h1>Принятые заказы клиентов:</h1>
+    <div th:each="order: ${accepted}">
+        <div class="alert alert-info" style="justify-content: space-between;
+    display: flex;">
+            <div>
+                <h2 th:text="'Заказ от ' +  ${order.order.date} + ' клиента ' + ${order.user.email}"></h2>
+                <div th:each="item: ${order.order.items}" style="display: flex;
+        justify-content: space-between;">
+                    <p th:text="${item.name}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1>Отклоненные заказы клиентов:</h1>
+    <div th:each="order: ${rejected}">
+        <div class="alert alert-info" style="justify-content: space-between;
+    display: flex;">
+            <div>
+                <h2 th:text="'Заказ от ' +  ${order.order.date} + ' клиента ' + ${order.user.email}"></h2>
+                <div th:each="item: ${order.order.items}" style="display: flex;
+        justify-content: space-between;">
+                    <p th:text="${item.name}"></p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -107,7 +153,6 @@
 <div class="footer">
     <div class="container">
         <div class="col-md-3 footer-left">
-            <a href="index.html"><img src="images/logo.png" alt=""/></a>
             <p class="footer-class">© 2019 PetsShop Все права защищены</p>
         </div>
         <div class="col-md-2 footer-middle">

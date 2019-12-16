@@ -14,6 +14,7 @@ import ru.leodev.examples.springboot.springbootwebspringsecurity.repos.*;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class AdminController {
@@ -40,6 +41,55 @@ public class AdminController {
     public String admin(Model model) {
         List<Item> items = itemRepo.findAll();
         model.addAttribute("items", items);
+
+        class OrderClient {
+            Order order;
+            User user;
+
+            public OrderClient(Order order, User user) {
+                this.order = order;
+                this.user = user;
+            }
+
+            public OrderClient() {
+            }
+
+            public Order getOrder() {
+                return order;
+            }
+
+            public void setOrder(Order order) {
+                this.order = order;
+            }
+
+            public User getUser() {
+                return user;
+            }
+
+            public void setUser(User user) {
+                this.user = user;
+            }
+        }
+
+        List<OrderClient> orders = orderRepo
+                .findAll()
+                .stream()
+                .map(o -> new OrderClient(o, userRepo.findOne(o.getUserId())))
+                .collect(Collectors.toList());
+
+        List<OrderClient> accepted = orders
+                .stream()
+                .filter(o -> o.getOrder().getStatus().equals("Принят"))
+                .collect(Collectors.toList());
+
+        List<OrderClient> rejected = orders
+                .stream()
+                .filter(o -> o.getOrder().getStatus().equals("Отклонён"))
+                .collect(Collectors.toList());
+
+        model.addAttribute("orders", orders.stream().filter(o -> o.getOrder().getStatus().equals("Активен")).collect(Collectors.toList()));
+        model.addAttribute("accepted", accepted);
+        model.addAttribute("rejected", rejected);
         return "/admin";
     }
 
@@ -65,6 +115,22 @@ public class AdminController {
     @PostMapping("/admin/deleteItem/{id}")
     public String deleteItem(@PathVariable Long id) {
         itemRepo.delete(id);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/admin/acceptOrder/{id}")
+    public String acceptOrder(@PathVariable Long id) {
+        Order order = orderRepo.findOne(id);
+        order.setStatus("Принят");
+        orderRepo.save(order);
+        return "redirect:/admin";
+    }
+
+    @PostMapping("/admin/rejectOrder/{id}")
+    public String rejectOrder(@PathVariable Long id) {
+        Order order = orderRepo.findOne(id);
+        order.setStatus("Отклонён");
+        orderRepo.save(order);
         return "redirect:/admin";
     }
 }
