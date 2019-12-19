@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Title</title>
+    <title>Pets Shop</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" href="../../css/bootstrap.css"/>
     <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css" />
     <script th:src="@{/js/jquery.min.js}" src="../../js/jquery.min.js"></script>
@@ -98,9 +98,8 @@
 </div>
 
 <div class="container">
-
     <div class="starter-template">
-        <h1 th:text="'Моя электронная почта: ' + ${logged.email}" style="margin-bottom: 20px"></h1>
+        <h1 th:text="'Мой логин: ' + ${logged.email}" style="margin-bottom: 20px"></h1>
         <form th:action="@{/logout}" method="post">
             <input type="submit" value="Sign Out" style="display: none" id="logout"/>
         </form>
@@ -115,7 +114,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 

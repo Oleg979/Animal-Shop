@@ -3,15 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>ru.leodev.examples.springboot</groupId>
-	<artifactId>spring-boot-web-spring-security</artifactId>
-	<version>0.0.1</version>
+	<groupId>ru.sstu.karina</groupId>
+	<artifactId>pet-shop</artifactId>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 
-	<name>Spring Boot Web Spring Security</name>
+	<name>pet-shop</name>
 	<description>Spring Boot Web Spring Security Example</description>
-	<url>http://leodev.ru/blog/news/spring-boot-spri…hymeleaf-example/</url>
-
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

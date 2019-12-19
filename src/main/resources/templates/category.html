@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Title</title>
+    <title>Pets Shop</title>
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" href="../../css/bootstrap.css"/>
     <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css" />
     <script th:src="@{/js/jquery.min.js}" src="../../js/jquery.min.js"></script>
@@ -112,15 +112,10 @@
                 </div>
             </a>
             <div class="col-in-right grid_1 simpleCart_shelfItem" style="margin-right: 5%; padding: 10px">
-                <h5 th:text="${item.name}"></h5>
-                <ul class="star">
-                    <li><a href="#"><i> </i> </a> </li>
-                    <li><a href="#"><i> </i> </a> </li>
-                    <li><a href="#"><i> </i> </a> </li>
-                    <li><i class="in-star"> </i> </li>
-                </ul>
+                <h5  th:text="${item.name}"></h5>
+                <h2 style="color:red" th:text="${item.rate}"></h2>
                 <!---->
-                <a href="#" class="item_add"><span class="white item_price" th:text="${item.price} + ' Руб'"> <i> </i> </span></a>
+                <a  th:href="@{'/item/{id}'(id=${item.id})}" class="item_add"><span class="white item_price" th:text="${item.price} + ' Руб'"> <i> </i> </span></a>
                 <!---->
             </div>
             <div class="clearfix" style="background-color: wheat;
