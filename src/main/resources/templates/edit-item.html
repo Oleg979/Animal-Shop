@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Pets Shop</title>
-    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.css}" />
     <link rel="stylesheet" th:href="@{/css/style.css}" href="../../css/style.css" />
     <script th:src="@{/js/jquery.min.js}" src="../../js/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -92,67 +92,54 @@
         </div>
     </div>
 </div>
-
-
 <div class="container">
-    <a class="continue" th:href="@{/admin/addItem}">Добавить товар</a>
-    <h1>Доступные товары:</h1>
-    <div th:each="item: ${items}">
-        <form method="post" th:action="@{'/admin/deleteItem/{id}'(id=${item.id})}"><button type="submit" th:id="'delete' + ${item.id}" style="display:none"></button> </form>
-        <div class="alert alert-info" style="display: flex;
-    justify-content: space-between;">
-            <h2 th:text="${item.name} + ' (' + ${item.price} + ') руб'"></h2>
-            <div>
-                <a th:href="@{'/admin/edit/{id}'(id=${item.id})}"><button type="button" class="btn btn-info" style="cursor:pointer">Изменить</button></a>
-                <button th:onclick="'delete' + ${item.id} + '.click()'" type="button" class="btn btn-danger" style="cursor:pointer">Удалить</button>
-            </div>
+
+    <div class="row" style="margin-top:20px">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form th:action="@{'/admin/edit/{id}'(id=${item.id})}" method="post">
+                <fieldset>
+                    <h1>Изменить товар <span th:text="${item.name}"></span></h1>
+
+
+
+                    <div class="form-group">
+                        <input type="text" name="name" id="name" class="form-control input-lg"
+                               placeholder="Название" required="true" autofocus="true" th:value="${item.name}"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="description" id="description" class="form-control input-lg"
+                               placeholder="Описание" required="true" th:value="${item.description}"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="image" id="image" class="form-control input-lg"
+                               placeholder="Изображение" required="true" th:value="${item.image}"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="number" name="price" id="price" class="form-control input-lg"
+                               placeholder="Цена" required="true" th:value="${item.price}"/>
+                    </div>
+                    <div class="form-group">
+                        <select name="category" class="form-control" th:value="${item.category}">
+                            <option disabled="disabled">Выберите категорию</option>
+                            <option value="Кормы для животных" selected="selected">Кормы для животных</option>
+                            <option value="Аксессуары">Аксессуары</option>
+                            <option value="Лежаки и домики">Лежаки и домики</option>
+                            <option value="Витамины и добавки">Витамины и добавки</option>
+                            <option value="Одежда">Одежда</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Сохранить изменения"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
     </div>
-    <h1>Активные заказы клиентов:</h1>
-    <div th:each="order: ${orders}">
-        <div class="alert alert-info" style="justify-content: space-between;
-    display: flex;">
-            <div>
-            <h2 th:text="'Заказ от ' +  ${order.order.date} + ' клиента ' + ${order.user.email}"></h2>
-                <form method="post" th:action="@{'/admin/acceptOrder/{id}'(id=${order.order.id})}"><button type="submit" th:id="'accept' + ${order.order.id}" style="display:none"></button> </form>
-                <form method="post" th:action="@{'/admin/rejectOrder/{id}'(id=${order.order.id})}"><button type="submit" th:id="'reject' + ${order.order.id}" style="display:none"></button> </form>
-                <div th:each="item: ${order.order.items}" style="display: flex;
-        justify-content: space-between;">
-                    <p th:text="${item.name}"></p>
-                </div>
-            </div>
-            <div style="display:flex">
-                <button th:onclick="'accept' + ${order.order.id} + '.click()'" type="button" class="btn btn-success" style="cursor:pointer; margin-right: 20px;">Принять</button>
-                <button th:onclick="'reject' + ${order.order.id} + '.click()'" type="button" class="btn btn-danger" style="cursor:pointer">Отклонить</button>
-            </div>
-        </div>
-    </div>
-    <h1>Принятые заказы клиентов:</h1>
-    <div th:each="order: ${accepted}">
-        <div class="alert alert-info" style="justify-content: space-between;
-    display: flex;">
-            <div>
-                <h2 th:text="'Заказ от ' +  ${order.order.date} + ' клиента ' + ${order.user.email}"></h2>
-                <div th:each="item: ${order.order.items}" style="display: flex;
-        justify-content: space-between;">
-                    <p th:text="${item.name}"></p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <h1>Отклоненные заказы клиентов:</h1>
-    <div th:each="order: ${rejected}">
-        <div class="alert alert-info" style="justify-content: space-between;
-    display: flex;">
-            <div>
-                <h2 th:text="'Заказ от ' +  ${order.order.date} + ' клиента ' + ${order.user.email}"></h2>
-                <div th:each="item: ${order.order.items}" style="display: flex;
-        justify-content: space-between;">
-                    <p th:text="${item.name}"></p>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </div>
 
 <div class="footer">

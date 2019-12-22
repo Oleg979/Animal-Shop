@@ -98,6 +98,25 @@ public class AdminController {
         return "add-item";
     }
 
+    @GetMapping("admin/edit/{id}")
+    public String editItem(@PathVariable Long id, Model model) {
+        Item item = itemRepo.findOne(id);
+        model.addAttribute("item", item);
+        return "edit-item";
+    }
+
+    @PostMapping("admin/edit/{id}")
+    public String putItem(@PathVariable Long id, @RequestParam String name, @RequestParam String description, @RequestParam String category, @RequestParam String image, @RequestParam Integer price) {
+        Item item = itemRepo.findOne(id);
+        item.setCategory(category);
+        item.setDescription(description);
+        item.setImage(image);
+        item.setName(name);
+        item.setPrice(price);
+        itemRepo.save(item);
+        return "redirect:/admin";
+    }
+
     @PostMapping("/admin/addItem")
     public String postItem(@RequestParam String name, @RequestParam String description, @RequestParam String category, @RequestParam String image, @RequestParam Integer price) {
         Item item = new Item();
