@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-    <link href='http://fonts.googleapis.com/css?family=Amaranth:400,700' rel='stylesheet' type='text/css'/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet"/>
     <script th:src="@{/js/move-top.js}" src="../../js/move-top.js"></script>
     <script th:src="@{/js/easing.js}" src="../../js/easing.js"></script>
     <script type="text/javascript">
@@ -25,7 +25,7 @@
     <script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
     <style>
         body {
-            font-family: 'Caveat', cursive;
+            font-family: 'Roboto Condensed', sans-serif;
             font-size: 2em;
 
         }
@@ -49,6 +49,8 @@
                     <li ><a th:href="@{/}" >Каталог товаров</a></li>
                     <li><a th:href="@{/user/profile}">Мой профиль</a> </li>
                     <li><a th:href="@{/about}">Связаться с нами</a></li>
+                    <li><a th:href="@{/search}">Поиск</a></li>
+
                     <li th:if="${isAdmin}"><a th:href="@{/admin}">Управление</a></li>
                     <!-- 				<li ><a href="#" >   how to use</a></li>
                      -->			</ul>
@@ -85,7 +87,7 @@
             </div>
             <div class="cart box_1">
                 <a th:href="@{/user/cart}">
-                    <h3> <div class="total">
+                    <h3 style="display: flex;"> <div class="total">
                         <span class="simpleCart_total">Корзина</span> (<span id="simpleCart_quantity" class="simpleCart_quantity" th:text="${cartSum}"></span> руб)</div>
                         <img th:src="@{/images/cart.png}" alt=""/></h3>
                 </a>
@@ -117,8 +119,8 @@
                         <div class="star-on">
                             <ul>
                                 <form method="post" th:action="@{'/item/{id}/rate'(id=${item.id})}">
-                                    <input type="number" name="amount" style="display:none" id="rate-input"/>
-                                    <button type="submit" style="display:none" id="send-rate"></button>
+                                    <input type="number" name="amount" style="display:none;" id="rate-input"/>
+                                    <button type="submit" style="display:none;" id="send-rate"></button>
                                     <li onclick="document.querySelector('#rate-input').value = 1; document.querySelector('#send-rate').click()"><a href="#"><i> </i></a></li>
                                     <li onclick="document.querySelector('#rate-input').value = 2; document.querySelector('#send-rate').click()"><a href="#"><i> </i></a></li>
                                     <li onclick="document.querySelector('#rate-input').value = 3; document.querySelector('#send-rate').click()"><a href="#"><i> </i></a></li>
@@ -136,7 +138,7 @@
 
 
                         <form method="post" th:action="@{'/item/{id}/addToCart'(id=${item.id})}">
-                            <button type="submit" id="addToCart" class="cart" style="display:none"></button>
+                            <button type="submit" id="addToCart" class="cart" style="display:none;"></button>
                             <a href="#" class="cart" onclick="document.querySelector('#addToCart').click()">Купить</a>
                         </form>
 
@@ -186,14 +188,22 @@
                             <span>asdasdasdasdsad</span>
                         </div>
                         <div th:each="comment : ${comments}" style="margin-bottom: 20px">
-                            <div>
-                                <span th:text="${comment.userName}"></span>: <span th:text="${comment.text}"></span>
+                            <form method="post"  th:action="@{'/item/{itemId}/comment/{commentId}'(itemId=${item.id}, commentId=${comment.id})}">
+                                <button type="submit" id="deleteComment" style="display: none"></button>
+                            </form>
+                            <div class="alert alert-info" role="alert" style="display: flex; justify-content: space-between">
+                                <div>
+                                    <span th:text="${comment.userName}"></span>: <span th:text="${comment.text}"></span>
+                                </div>
+                                <div>
+                                    <button th:if="${isAdmin}" type="button" class="btn btn-danger" onclick="deleteComment.click()">Удалить</button>
+                                </div>
                             </div>
                         </div>
                         <form method="post" th:action="@{'/item/{id}/addComment'(id=${item.id})}">
                         <div class="form-group">
                             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="commentText"></textarea>
-                            <button type="submit" id="addComment" class="cart" style="display:none"></button>
+                            <button type="submit" id="addComment" class="cart" style="display:none;"></button>
                             <a href="#" class="cart" onclick="document.querySelector('#addComment').click()">Отправить</a>
                         </div>
                         </form>

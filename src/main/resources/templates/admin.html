@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-    <link href='http://fonts.googleapis.com/css?family=Amaranth:400,700' rel='stylesheet' type='text/css'/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet"/>
     <script th:src="@{/js/move-top.js}" src="../../js/move-top.js"></script>
     <script th:src="@{/js/easing.js}" src="../../js/easing.js"></script>
     <script type="text/javascript">
@@ -26,7 +26,7 @@
     <script>$(document).ready(function(){$(".megamenu").megamenu();});</script>
     <style>
         body {
-            font-family: 'Caveat', cursive;
+            font-family: 'Roboto Condensed', sans-serif;
             font-size: 2em;
         }
         .banner-top {
@@ -50,6 +50,8 @@
                     <li ><a th:href="@{/}" >Каталог товаров</a></li>
                     <li><a th:href="@{/user/profile}">Мой профиль</a> </li>
                     <li><a th:href="@{/about}">Связаться с нами</a></li>
+                    <li><a th:href="@{/search}">Поиск</a></li>
+
                     <li><a th:href="@{/admin}">Управление</a></li>
                     <!-- 				<li ><a href="#" >   how to use</a></li>
                      -->			</ul>
@@ -100,7 +102,9 @@
         <div class="alert alert-info" style="display: flex;
     justify-content: space-between;">
             <h2 th:text="${item.name} + ' (' + ${item.price} + ') руб'"></h2>
-            <h2 th:onclick="'delete' + ${item.id} + '.click()'" style="cursor:pointer">X</h2>
+            <div>
+            <button th:onclick="'delete' + ${item.id} + '.click()'" type="button" class="btn btn-danger" style="cursor:pointer">Удалить</button>
+            </div>
         </div>
     </div>
     <h1>Активные заказы клиентов:</h1>
@@ -117,8 +121,8 @@
                 </div>
             </div>
             <div style="display:flex">
-                <h2 th:onclick="'accept' + ${order.order.id} + '.click()'" style="cursor:pointer; margin-right: 20px;">✔</h2>
-                <h2 th:onclick="'reject' + ${order.order.id} + '.click()'" style="cursor:pointer">X</h2>
+                <button th:onclick="'accept' + ${order.order.id} + '.click()'" type="button" class="btn btn-danger" style="cursor:pointer; margin-right: 20px;">Принять</button>
+                <button th:onclick="'reject' + ${order.order.id} + '.click()'" type="button" class="btn btn-danger" style="cursor:pointer">Отклонить</button>
             </div>
         </div>
     </div>

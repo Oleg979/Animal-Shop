@@ -1,6 +1,5 @@
 package ru.sstu.karina.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,7 +16,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-@Slf4j
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepo userRepo;
@@ -33,7 +31,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         for (Role role : user.getRoles()){
             grantedAuthorities.add(new SimpleGrantedAuthority(role.getName()));
         }
-        log.info(user.getEmail() + " get roles: " + grantedAuthorities.toString());
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
     }

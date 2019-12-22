@@ -1,6 +1,5 @@
 package ru.sstu.karina;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,12 +15,11 @@ import java.util.Date;
 import java.util.HashSet;
 
 @Configuration
-@Slf4j
 public class DBInitializer {
     @Bean
     CommandLineRunner initDatabase(UserRepo userRepo, ItemRepo itemRepo, RoleRepo roleRepo, BCryptPasswordEncoder bCryptPasswordEncoder) {
         return args -> {
-            itemRepo.save(new Item(1L, "Корм Happy Cat", "Корм Happy Cat — это завораживающий вкус сочных мясных ломтиков и фирменный соус. Такое аппетитное сочетание станет истинным наслаждением даже для самых притязательных кошек. Нежные курица и индейка или изысканные креветки и форель? А может быть, пленительное сочетание телятины и языка? Что выберет ваша кошка сегодня? Порадуйте вашу любимицу большим выбором изысканной коллекции блюд линейки SHEBA", "Кормы для животных", "https://img.is-animal.ru/large/89/10378245-0.jpg", 399, 4.5, new Date()));
+            itemRepo.save(new Item(1L, "Корм Happy Cat", "Корм Happy Cat — это завораживающий вкус сочных мясных ломтиков и фирменный соус. Такое аппетитное сочетание станет истинным наслаждением даже для самых притязательных кошек. Нежные курица и индейка или изысканные креветки и форель? А может быть, пленительное сочетание телятины и языка? Что выберет ваша кошка сегодня? Порадуйте вашу любимицу большим выбором изысканной коллекции блюд линейки SHEBA", "Кормы для животных", "https://avatars.mds.yandex.net/get-mpic/1912105/img_id2941776978256561575.jpeg/9hq", 399, 4.5, new Date()));
             itemRepo.save(new Item(2L, "Корм Purina Pro Plan Sterilised", "Тип корма: сухой\n" +
                     "Гарнир: злаки\n" +
                     "Вкус: с индейкой\n" +

@@ -1,6 +1,5 @@
 package ru.sstu.karina.config;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,7 +12,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 @Service
-@Slf4j
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
@@ -27,7 +25,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Role userRole = roleRepo.findAll().stream().filter(r -> r.getName().equals("ROLE_USER")).findFirst().get();
         user.setRoles(new HashSet<>(Arrays.asList(userRole)));
-        log.info(user.getEmail() + " has roles: " + user.getRoles().toString());
         userRepo.save(user);
     }
 

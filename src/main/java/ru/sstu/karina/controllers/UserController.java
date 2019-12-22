@@ -1,6 +1,5 @@
 package ru.sstu.karina.controllers;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,9 +16,9 @@ import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
-@Slf4j
 public class UserController {
 
     private UserRepo userRepo;
@@ -210,6 +209,36 @@ public class UserController {
         return "redirect:/item/" + id;
     }
 
+    @PostMapping("/item/{itemId}/comment/{commentId}")
+    public String deleteComment(@PathVariable Long itemId, @PathVariable Long commentId) {
+        commentRepo.delete(commentId);
+        return "redirect:/item/" + itemId;
+    }
+
+    @GetMapping("/search")
+    public String search(Principal principal, Model model) {
+        model.addAttribute("cartSum", getCartSum(principal));
+        model.addAttribute("isAdmin", isAdmin(principal));
+        return "search";
+    }
+
+    @PostMapping("/search")
+    public String findItems(Principal principal, Model model, @RequestParam String title, @RequestParam Long price, @RequestParam String[] categories) {
+        Stream<Item> all = itemRepo.findAll().stream();
+        all = all.filter(i -> i.getName().toLowerCase().contains(title.toLowerCase()));
+        all = all.filter(i -> {
+            for(String category: categories) {
+                if(i.getCategory().equals(category)) return true;
+            }
+            return false;
+        });
+        List<Item> res = all.filter(i -> i.getPrice() <= price).collect(Collectors.toList());
+        model.addAttribute("items", res);
+        model.addAttribute("cartSum", getCartSum(principal));
+        model.addAttribute("isAdmin", isAdmin(principal));
+        return "search";
+    }
+
     @PostMapping("/order")
     @Transactional
     public String createOrder(Principal principal) {
@@ -232,7 +261,6 @@ public class UserController {
 
     @PostMapping("/item/{id}/rate")
     public String rate(@PathVariable Long id, Principal principal, @RequestParam Integer amount) {
-        log.info("rate = " + amount);
         Rate rate = new Rate();
         rate.setItemId(id);
 
