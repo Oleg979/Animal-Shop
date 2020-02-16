@@ -20,5 +20,6 @@ jobs:
       with:
         fromMailAddress: no-reply@example.com
         toMailAddress: olegsolovev506@gmail.com
+        labelsToMonitor: "[{breaking-change}]"  
         subject: Notification
         verbose: true
