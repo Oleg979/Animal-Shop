@@ -15,11 +15,7 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-    - name: GitHub Issue Notifier
-      uses: timheuer/issue-notifier@v1.0.2
+    - name: Download artifact
+      uses: actions/download-artifact@v1.0.0
       with:
-        fromMailAddress: no-reply@example.com
-        toMailAddress: olegsolovev506@gmail.com
-        labelsToMonitor: "[{breaking-change}]"  
-        subject: Notification
-        verbose: true
+        name: release.jar
