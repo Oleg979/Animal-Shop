@@ -18,4 +18,4 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v1.0.0
       with:
-        name: release.jar
+        name: pet-shop-1.0.jar
